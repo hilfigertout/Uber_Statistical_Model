@@ -13,4 +13,12 @@ Uber_Model_v3.py - this iteration introduces the ability for riders to indicate 
 
 HOW THE MODEL WORKS:
 
-1000 drivers are randomly placed on a 10x10 coordinate grid. In a 1 unit radius around each driver, 47 riders are randomly placed. (There is significant overlap between the drivers that can service each rider.) Note that this means some riders can be outside the 10x10 grid, which we will interpret as being on the outskirts of our city. The 
+1000 drivers are randomly placed on a 10x10 coordinate grid. In a 1 unit radius around each driver, 20 riders are randomly placed. (There is significant overlap between the drivers that can service each rider.) Note that this means some riders can be outside the 10x10 grid, which we will interpret as being on the outskirts of our city. 
+
+Each "day" in the simulation, some portion of the riders will want a ride. One of the drivers within a radius of 1 unit of the rider will service that request. (Each driver can service up to 10 riders per day. The order they service riders in changes each day.) Some percentage of drivers and riders will be malicious. If either the driver or the rider is malicious (or both) and they are riding with a preferred target, there is a chance an assault will occur. (This will not happen 100% of the time, partly because that's what will happen realistically and partly because it gives us a simple parameter to tweak to ensure the simulation matches reality.) If an assault occurs, that rider and driver will never ride with each other again. 
+
+Once all riders have been serviced or no drivers are left to service those still available, the day ends and the next day is set up, with a new selection of riders needing rides. The simulation  runs for 50 days and tracks the number of sexual assaults that occur each day and the number of rides that occur each day.
+
+PROBLEMS WITH THE MODEL:
+
+- Malicious users will never again ride with someone they have assaulted, and the simulation never adds new people. Thus, the number of assaults drops sharply (and unrealistically) if the simulation runs for long enough. To account for this, the simulation only runs for 50 days, where this effect is negligible. 

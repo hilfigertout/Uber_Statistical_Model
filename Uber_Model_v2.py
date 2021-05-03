@@ -168,6 +168,7 @@ class Driver:
         for rider in self.ridersInRange:
             if (rider.needRide):
                 self.activeInRange.append(rider)
+        self.activeInRange.shuffle()
 
     #Resets the driver for the next day.
     #Must be called AFTER the all of the riders are prepared
