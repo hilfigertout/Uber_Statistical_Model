@@ -59,7 +59,7 @@ class Board:
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
         self.probMaliciousMan = 0.02023    #PROBABILITY A MAN IS MALICIOUS
         self.probMaliciousWoman = 0.00625  #PROBABILITY A WOMAN IS MALICIOUS
-        self.probAssault = 0.37067	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probAssault = 0.3938		 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -129,7 +129,7 @@ class Driver:
         self.activeInRange = []         #LIST OF ACTIVE RIDERS IN RANGE  
         self.isMalicious = False       #MALICIOUS INDICATOR
 
-        for i in range(ridersPer):         #Generate 20 riders per driver
+        for i in range(self.ridersPer):         #Generate 20 riders per driver
             rx = xcoord + r.uniform(-1*self.radius, self.radius)
             ybound = math.sqrt(self.radius*self.radius - (rx - xcoord)**2)
             ry = ycoord + r.uniform(-1*ybound, ybound)
@@ -251,7 +251,7 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1095)		#Set Seed
+r.seed(1325)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations
