@@ -40,7 +40,7 @@ from scipy import stats
     # is malicious is 0.020243 and the probability is 0.006236. (Again, this is ~20000x real life values)
 
 # By running multiple simulations, we have determined that the probability an assault happens
-# when a malicious person is on a ride is 0.37067.
+# when a malicious person is on a ride is 0.3938.
 
 
 
@@ -59,7 +59,7 @@ class Board:
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
         self.probMaliciousMan = 0.02023    #PROBABILITY A MAN IS MALICIOUS
         self.probMaliciousWoman = 0.00625  #PROBABILITY A WOMAN IS MALICIOUS
-        self.probAssault = 0.3938		 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probAssault = 0.3938	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
