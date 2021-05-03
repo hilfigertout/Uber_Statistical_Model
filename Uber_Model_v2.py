@@ -8,10 +8,14 @@ from scipy import stats
 # Sources and Derivations: 
 
 # In 2019 and 2020, there were 5 million Uber drivers and 18.7 million trips per day, on average. (Source 1)
-    # This means that each driver makes an average of 3.74 trips per day. So for a minimum of 47 riders per driver,
-    # we will say the probability a rider needs a ride is 0.0795. 
+    # This means that each driver makes an average of 3.74 trips per day. So for a minimum of 20 riders per driver,
+    # we will say the probability a rider needs a ride is 0.187
     # For 1000 drivers, we expect to see approx. 3740 rides per day, 187000 rides over 50 days.
-    # Counting the number of rides with this parameter shows that it works. 
+    # Running the sim while counting the number of rides with this parameter shows that it works. 
+
+# For those 5 million drivers, Uber claims to have 103 million average monthly users. (Source 1)
+    # This means an average of 20.6 riders per driver. We will give each driver 20 riders, on the argument that
+    # each driver needs to have at least that many to sustain themselves.
 
 # In 2017, 36.1 % of Uber drivers were female. (source 1)
 
@@ -40,8 +44,8 @@ from scipy import stats
 
 
 
-# Source 1: https://www.businessofapps.com/data/uber-statistics/
-# Source 2:  https://www.cdc.gov/violenceprevention/pdf/nisvs_report2010-a.pdf 
+# Source 1: http://web.archive.org/web/20210423034332/https://www.businessofapps.com/data/uber-statistics/, accessed 3 May 2021
+# Source 2:  https://www.cdc.gov/violenceprevention/pdf/nisvs_report2010-a.pdf, accessed 3 May 2021
 
 
 class Board:
@@ -49,7 +53,6 @@ class Board:
     numDays = 50
     
     def __init__(self):
-
         self.mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
         self.mTm = 1 - self.mTw              #PROBABILITY A MALICIOUS MAN TARGETS MEN
         self.wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
@@ -61,6 +64,7 @@ class Board:
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
         self.assaults = []          #TRACKS ASSAULTS BY DAY 
+        self.rides = []             #TRACKS TOTAL RIDES BY DAY
         self.activeRiders = set()      #SET OF RIDERS WHO NEED A RIDE THAT DAY
         self.activeDrivers = set()     #SET OF DRIVERS WHO CAN STILL GIVE A RIDE THAT DAY
         self.driversToRemove = set()   #SET OF DRIVERS NOT ACTIVE AFTER EACH BATCH OF RIDES
@@ -84,6 +88,7 @@ class Board:
     def runSim(self):
         for day in range(self.numDays):
             self.assaults.append(0)
+            self.rides.append(0)
             self.day = day
             self.activeDrivers = self.setDrivers.copy()
 
@@ -112,6 +117,7 @@ class Board:
 class Driver:
     probMale = 0.639             #PROBABILITY THE DRIVER IS MALE
     radius = 1                  #RADIUS THE DRIVER CAN GIVE RIDES IN
+    ridersPer = 20              #NUMBER OF RIDERS GENERATED PER DRIVER
     def __init__(self, board):
         self.ridesGiven = 0            #NUMBER OF RIDES GIVEN THAT DAY
         xcoord = r.uniform(0, 10)
@@ -123,7 +129,7 @@ class Driver:
         self.activeInRange = []         #LIST OF ACTIVE RIDERS IN RANGE  
         self.isMalicious = False       #MALICIOUS INDICATOR
 
-        for i in range(47):         #Generate 47 riders per driver
+        for i in range(ridersPer):         #Generate 20 riders per driver
             rx = xcoord + r.uniform(-1*self.radius, self.radius)
             ybound = math.sqrt(self.radius*self.radius - (rx - xcoord)**2)
             ry = ycoord + r.uniform(-1*ybound, ybound)
@@ -184,6 +190,7 @@ class Driver:
                 else:
                     rider = None
             if (not rider is None):
+                board.rides[board.day] = board.rides[board.day] + 1
                 if (rider.isMalicious):
                     if ((self.male and not rider.targetWomen) and (r.random() < board.probAssault)):  #Assault occurs     
                         board.assaults[board.day] = board.assaults[board.day] + 1
@@ -204,7 +211,7 @@ class Driver:
             
 
 class Rider:
-    probNeedRide = 0.0795                #PROBABILITY RIDER NEEDS A RIDE
+    probNeedRide = 0.187               #PROBABILITY RIDER NEEDS A RIDE
     probMale = 0.5                      #PROBABILITY THE RIDER IS MALE
     def __init__(self, board, rx, ry):
         self.male = False                   #INDICATES THE SEX OF THE RIDER
@@ -244,19 +251,35 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1066)		#Set Seed
+r.seed(1095)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
+total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations
     b = Board()
     b.runSim()
     print("Simulation " + str(i) + " complete! ")
     total_assaults.append(sum(b.assaults))
+    total_rides.append(sum(b.rides))
 
-#Print data
-print("mean: " + str(numpy.mean(total_assaults)))
+
+#Print Data:
+print("average rides per sim: " + str(numpy.mean(total_rides)))
+print(str(total_rides))
+print("mean assaults: " + str(numpy.mean(total_assaults)))
 print(str(total_assaults))
 
-# Significance test
+# Significance tests
+print("Rides test: ")
+alpha = 0.05
+print("Ho: mu = 187000")
+print("Ha: mu != 187000")
+print("Significance level = " + str(alpha))
+s, p = scipy.stats.ttest_1samp(total_rides, 187000.0, alternative="two-sided")
+print("P_value = " + str(p))
+print("Reject Ho = " + str((p < alpha)))
+
+
+print("Assaults test: ")
 alpha = 0.05
 print("Ho: mu = 834")
 print("Ha: mu != 834")
