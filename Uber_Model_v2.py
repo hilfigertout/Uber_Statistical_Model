@@ -5,6 +5,9 @@ import numpy
 import scipy
 from scipy import stats
 
+# Rideshare service model, tuned to match our expectations of reality
+# Author: Ian Roberts
+
 # Sources and Derivations: 
 
 # In 2019 and 2020, there were 5 million Uber drivers and 18.7 million trips per day, on average. (Source 1)
@@ -59,7 +62,7 @@ class Board:
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
         self.probMaliciousMan = 0.02023    #PROBABILITY A MAN IS MALICIOUS
         self.probMaliciousWoman = 0.00625  #PROBABILITY A WOMAN IS MALICIOUS
-        self.probAssault = 0.3938	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probAssault = 0.345	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -168,7 +171,7 @@ class Driver:
         for rider in self.ridersInRange:
             if (rider.needRide):
                 self.activeInRange.append(rider)
-        self.activeInRange.shuffle()
+        r.shuffle(self.activeInRange)
 
     #Resets the driver for the next day.
     #Must be called AFTER the all of the riders are prepared
@@ -218,6 +221,7 @@ class Rider:
         self.male = False                   #INDICATES THE SEX OF THE RIDER
         self.needRide = False               #INDICATES IF RIDER NEEDS A RIDE THAT DAY
         self.coords = (rx, ry)              #COORDINATES OF THE RIDER
+        self.targetWomen = None             #IF MALICIOUS, INDICATES PREFERRED TARGET SEX
         self.isMalicious = False            #MALICIOUSNESS INDICATOR
         if (r.random() < self.probMale):
             self.male = True
@@ -252,7 +256,7 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1325)		#Set Seed
+r.seed(1212)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations

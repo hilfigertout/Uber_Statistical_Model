@@ -1,9 +1,10 @@
 import random as r
 import math
 
+# Rough Draft for Uber Model
+# Author: Ian Roberts
 
 
-#TODO - make this much faster
 
 class Board:
     numDrivers = 1000
