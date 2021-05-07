@@ -76,7 +76,7 @@ class Board:
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
         self.probMaliciousMan = 0.02023    #PROBABILITY A MAN IS MALICIOUS
         self.probMaliciousWoman = 0.00625  #PROBABILITY A WOMAN IS MALICIOUS
-        self.probAssault = 0.3938	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probAssault = 0.345	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -201,20 +201,24 @@ class Driver:
     def giveRide(self, board):
         rider = None
         if (len(self.activeInRange) > 0 and self.ridesGiven < 10):
-            i = 0                       #Tracks the number of riders who prefer a different sex than the driver. 
-            rider = self.activeInRange.pop(0)
-            while (not (rider in board.activeRiders) and (not (rider is None))):
+            i = 0                       #Tracks the number of riders who prefer a different sex than the driver.
+            foundRider = False 
+            noRiders = False
+            while (not foundRider and not noRiders):
                 if (len(self.activeInRange) > 0):
                     rider = self.activeInRange.pop(0)
-                    if ((i < len(self.activeInRange)) and((rider.preferredSex == "M" and self.male == False) or 
-                    (rider.preferredSex == "F" and self.male == True))):
-                        self.activeInRange.append(rider)
-                        rider = None
-                        i = i + 1
+                    if (rider.needRide):   #Need to check here, in case other driver already got him/her.
+                        if ((i < len(self.activeInRange)) and (not rider.preferDriver(self))):
+                            self.activeInRange.append(rider)
+                            i = i + 1
+                        else:           #Either a compatible match, or no other riders are compatible. 
+                            foundRider = True
                 else:
                     rider = None
+                    noRiders = True 
             if (not rider is None):
                 board.rides[board.day] = board.rides[board.day] + 1
+                rider.needRide = False
                 if (rider.isMalicious):
                     if ((self.male and not rider.targetWomen) and (r.random() < board.probAssault)):  #Assault occurs     
                         board.assaults[board.day] = board.assaults[board.day] + 1
@@ -251,8 +255,10 @@ class Rider:
                 self.isMalicious = True
                 if (r.random() < board.mTw):
                     self.targetWomen = True
+                    self.preferredSex = "F"
                 else:
                     self.targetWomen = False
+                    self.preferredSex = "M"
             else:
                 if (r.random() < board.mPreference):
                     if (r.random() < board.mPw):
@@ -277,6 +283,16 @@ class Rider:
             self.needRide = True
         return self.needRide
 
+    #Returns TRUE if the driver's sex is the same as the rider's preferred sex,
+    #False otherwise.
+    #If the rider has no preference, this just returns true.
+    def preferDriver(self, driver):
+        output = True
+        if (not (self.preferredSex is None)):
+            if ((driver.male and self.preferredSex == "F") or ((not driver.male) and self.preferredSex == "M")):
+                output = False
+        return output
+
 
 
 
@@ -286,47 +302,47 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1325)		#Set Seed
-b = Board()
-b.runSim()
-print("Assaults: " + str(sum(b.assaults)))
-print("Rides: " + str(sum(b.rides)))
+r.seed(2112)		#Set Seed
+# b = Board()
+# b.runSim()
+# print("Assaults: " + str(sum(b.assaults)))
+# print("Rides: " + str(sum(b.rides)))
 
-# total_assaults = []	#List to store the total number of assaults per simulation
-# total_rides = []    #List to store the total number of rides per simulation
-# for i in range(50):	#Run 50 simulations
-#     b = Board()
-#     b.runSim()
-#     print("Simulation " + str(i) + " complete! ")
-#     total_assaults.append(sum(b.assaults))
-#     total_rides.append(sum(b.rides))
-
-
-# #Print Data:
-# print("average rides per sim: " + str(numpy.mean(total_rides)))
-# print(str(total_rides))
-# print("mean assaults: " + str(numpy.mean(total_assaults)))
-# print(str(total_assaults))
-
-# # Significance tests
-# print("Rides test: ")
-# alpha = 0.05
-# print("Ho: mu = 187000")
-# print("Ha: mu != 187000")
-# print("Significance level = " + str(alpha))
-# s, p = scipy.stats.ttest_1samp(total_rides, 187000.0, alternative="two-sided")
-# print("P_value = " + str(p))
-# print("Reject Ho = " + str((p < alpha)))
+total_assaults = []	#List to store the total number of assaults per simulation
+total_rides = []    #List to store the total number of rides per simulation
+for i in range(50):	#Run 50 simulations
+    b = Board()
+    b.runSim()
+    print("Simulation " + str(i) + " complete! ")
+    total_assaults.append(sum(b.assaults))
+    total_rides.append(sum(b.rides))
 
 
-# print("Assaults test: ")
-# alpha = 0.05
-# print("Ho: mu = 834")
-# print("Ha: mu != 834")
-# print("Significance level = " + str(alpha))
-# s, p = scipy.stats.ttest_1samp(total_assaults, 834.0, alternative="two-sided")
-# print("P_value = " + str(p))
-# print("Reject Ho = " + str((p < alpha)))
+#Print Data:
+print("average rides per sim: " + str(numpy.mean(total_rides)))
+print(str(total_rides))
+print("mean assaults: " + str(numpy.mean(total_assaults)))
+print(str(total_assaults))
+
+# Significance tests
+print("Rides test: ")
+alpha = 0.05
+print("Ho: mu = 187000")
+print("Ha: mu != 187000")
+print("Significance level = " + str(alpha))
+s, p = scipy.stats.ttest_1samp(total_rides, 187000.0, alternative="two-sided")
+print("P_value = " + str(p))
+print("Reject Ho = " + str((p < alpha)))
+
+
+print("Assaults test: ")
+alpha = 0.05
+print("Ho: mu = 834")
+print("Ha: mu != 834")
+print("Significance level = " + str(alpha))
+s, p = scipy.stats.ttest_1samp(total_assaults, 834.0, alternative="two-sided")
+print("P_value = " + str(p))
+print("Reject Ho = " + str((p < alpha)))
 
 
 
