@@ -50,7 +50,7 @@ from scipy import stats
 # When a rider needs a ride, they may indicate a preferred sex. If the driver is not that sex, then
 # the driver will not give them a ride unless nobody else is available. 
 
-# 40% of non-malicious male riders will indicate a preferred sex 40% of the time; 50% of the time it will be women 
+# 40% of non-malicious male riders will indicate a preferred sex; 50% of the time it will be women 
 # and 50% of the time it will be men. 
 # 60% of non-malicious female riders will indicate a preferred sex; 80% of the time it will be
 # women, and 20% of the time it will be men. 
@@ -336,7 +336,7 @@ print("Reject Ho = " + str((p < alpha)))
 
 
 print("Assaults test: ")
-alpha = 0.05
+alpha = 0.01
 print("Ho: mu = 834")
 print("Ha: mu != 834")
 print("Significance level = " + str(alpha))
