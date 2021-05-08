@@ -1,6 +1,6 @@
 import random as r
 import math
-import matplotlib.pyplot as plotter
+#import matplotlib.pyplot as plotter
 import numpy
 import scipy
 from scipy import stats

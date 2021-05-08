@@ -75,7 +75,7 @@ class Driver:
         self.ridersInRange = set()      #SET OF THE RIDERS IN RANGE OF THE DRIVER
         self.activeInRange = []         #LIST OF ACTIVE RIDERS IN RANGE  
         self.isMalicious = False       #MALICIOUS INDICATOR
-        for i in range(47):         #Generate 47 riders per driver
+        for i in range(20):         #Generate 20 riders per driver
             rx = xcoord + r.uniform(-1*self.radius, self.radius)
             ybound = math.sqrt(self.radius*self.radius - (rx - xcoord)**2)
             ry = ycoord + r.uniform(-1*ybound, ybound)
