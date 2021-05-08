@@ -56,7 +56,7 @@ Model v3 implements rider choice. Riders can indicate a preference for either ma
 
 - In model v3, when riders can choose to indicate a preferred driver sex, there is no data for what proportion of people would indicate a preference or how many would choose which driver sex. The numbers in the model are pure guesswork, based on an assumption that non-malicious men would not be as safety-concious and would be less likely to indicate a preference, as well as relatively equally preferring men and women. By contrast, we assume non-malicious women are more safety concious and are more likely to indicate a female driver. Ultimately, however, playing around with these numbers only caused minor changes to the final assault average. 
 
-- We assumed that 100% of all malicious riders in model v3 utilize the driver choice feature to bring targets to them. In reality, some may instead be opportunistic predators instead of premeditated ones. Additionally, we assumed the average chance of an assault happening did not change from model v2 to model v3. It is possible that having a perpetrator that is already bringing targets to them could increase the likelihood of an assault occurring, since it's not premeditated.
+- We assumed that 100% of all malicious riders in model v3 utilize the driver choice feature to bring targets to them. In reality, some may instead be opportunistic predators instead of premeditated ones. Additionally, we assumed the average chance of an assault happening did not change from model v2 to model v3. It is possible that having a perpetrator that is already bringing targets to them could increase the likelihood of an assault occurring, since it's premeditated.
 
 ## SOURCES
 
