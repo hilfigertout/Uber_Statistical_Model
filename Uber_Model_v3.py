@@ -87,7 +87,7 @@ class Board:
         self.activeDrivers = set()     #SET OF DRIVERS WHO CAN STILL GIVE A RIDE THAT DAY
         self.driversToRemove = set()   #SET OF DRIVERS NOT ACTIVE AFTER EACH BATCH OF RIDES
         
-        for i in range(self.numDrivers):
+        for i in range(self.numDrivers):            #Generate drivers
             self.setDrivers.add(Driver(self))
 
         for i in range(self.ridersPer*self.numDrivers):         #Generate 20 riders per driver
@@ -95,7 +95,10 @@ class Board:
             ry = r.uniform(0, 10)
             self.setRiders.add(Rider(self, rx, ry))
 
-        for rider in self.setRiders:
+        for driver in (self.setDrivers):                #Each driver finds the riders in their range
+            driver.findRidersInRange(self)
+
+        for rider in self.setRiders:                    #Set up riders and drivers for first day
             active = rider.nextDay()
             if (active):
                 self.activeRiders.add(rider)
