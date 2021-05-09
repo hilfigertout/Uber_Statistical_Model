@@ -56,6 +56,7 @@ class Board:
     numDays = 50
     
     def __init__(self):
+        self.ridersPer = 20             #NUMBER OF RIDERS GENERATED PER DRIVER
         self.mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
         self.mTm = 1 - self.mTw              #PROBABILITY A MALICIOUS MAN TARGETS MEN
         self.wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
@@ -73,7 +74,12 @@ class Board:
         self.driversToRemove = set()   #SET OF DRIVERS NOT ACTIVE AFTER EACH BATCH OF RIDES
         
         for i in range(self.numDrivers):
-            Driver(self)
+            self.setDrivers.add(Driver(self))
+
+        for i in range(self.ridersPer*self.numDrivers):         #Generate 20 riders per driver
+            rx = r.uniform(0, 10)
+            ry = r.uniform(0, 10)
+            self.setRiders.add(Rider(self, rx, ry))
         
         for driver in (self.setDrivers):
             driver.findRidersInRange(self)
@@ -120,7 +126,6 @@ class Board:
 class Driver:
     probMale = 0.639             #PROBABILITY THE DRIVER IS MALE
     radius = 1                  #RADIUS THE DRIVER CAN GIVE RIDES IN
-    ridersPer = 20              #NUMBER OF RIDERS GENERATED PER DRIVER
     def __init__(self, board):
         self.ridesGiven = 0            #NUMBER OF RIDES GIVEN THAT DAY
         xcoord = r.uniform(0, 10)
@@ -132,13 +137,6 @@ class Driver:
         self.activeInRange = []         #LIST OF ACTIVE RIDERS IN RANGE  
         self.isMalicious = False       #MALICIOUS INDICATOR
 
-        for i in range(self.ridersPer):         #Generate 20 riders per driver
-            rx = xcoord + r.uniform(-1*self.radius, self.radius)
-            ybound = math.sqrt(self.radius*self.radius - (rx - xcoord)**2)
-            ry = ycoord + r.uniform(-1*ybound, ybound)
-            newRider = Rider(board, rx, ry)
-            board.setRiders.add(newRider)
-        board.setDrivers.add(self)
         if (r.random() < self.probMale):
             self.male = True
             if (r.random() < board.probMaliciousMan):

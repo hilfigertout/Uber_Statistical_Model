@@ -10,6 +10,7 @@ class Board:
     numDrivers = 1000
     numDays = 50
     def __init__(self):
+        self.ridersPer = 20             #NUMBER OF RIDERS GENERATED PER DRIVER
         self.probMalicious = 0.01324    #PROBABILITY A DRIVER OR RIDER IS MALICIOUS, APPROX. 10000x REAL LIFE
         self.probAssault = 0.5      #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
@@ -21,10 +22,12 @@ class Board:
         self.driversToRemove = set()   #SET OF DRIVERS NOT ACTIVE AFTER EACH BATCH OF RIDES
         
         for i in range(self.numDrivers):
-            Driver(self)
-        
-        for driver in (self.setDrivers):
-            driver.findRidersInRange(self)
+            self.setDrivers.add(Driver(self))
+
+        for i in range(self.ridersPer*self.numDrivers):         #Generate 20 riders per driver
+            rx = r.uniform(0, 10)
+            ry = r.uniform(0, 10)
+            self.setRiders.add(Rider(self, rx, ry))
 
         for rider in self.setRiders:
             active = rider.nextDay()
@@ -75,13 +78,6 @@ class Driver:
         self.ridersInRange = set()      #SET OF THE RIDERS IN RANGE OF THE DRIVER
         self.activeInRange = []         #LIST OF ACTIVE RIDERS IN RANGE  
         self.isMalicious = False       #MALICIOUS INDICATOR
-        for i in range(20):         #Generate 20 riders per driver
-            rx = xcoord + r.uniform(-1*self.radius, self.radius)
-            ybound = math.sqrt(self.radius*self.radius - (rx - xcoord)**2)
-            ry = ycoord + r.uniform(-1*ybound, ybound)
-            newRider = Rider(board, rx, ry)
-            board.setRiders.add(newRider)
-        board.setDrivers.add(self)
         if (r.random() < board.probMalicious):
             self.isMalicious = True
 

@@ -34,7 +34,7 @@ replacing the "#" with the number of the model you wish to run.
 
 ## HOW THE MODEL WORKS:
 
-1000 drivers are randomly placed on a 10x10 coordinate grid. In a 1 unit radius around each driver, 20 riders are randomly placed. (There is significant overlap between the drivers that can service each rider.) Note that this means some riders can be outside the 10x10 grid, which we will interpret as being on the outskirts of our city. 
+1000 drivers are randomly placed on a 10x10 coordinate grid. Then, for each driver, 20 riders are randomly scattered around the board. (There is significant overlap between the drivers that can service each rider.) 
 
 Each "day" in the simulation, some portion of the riders will want a ride. One of the drivers within a radius of 1 unit of the rider will service that request. (Each driver can service up to 10 riders per day. The order they service riders in changes each day.) Some percentage of drivers and riders will be malicious. If either the driver or the rider is malicious (or both) and they are riding with a preferred target, there is a chance an assault will occur. (This will not happen 100% of the time, partly because that's what will happen realistically and partly because it gives us a simple parameter to tweak to ensure the simulation matches reality.) If an assault occurs, that rider and driver will never ride with each other again. 
 
