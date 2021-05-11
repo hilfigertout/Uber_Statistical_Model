@@ -39,8 +39,9 @@ from scipy import stats
 # With some calculations from the CDC estimates (Source 2), we see that the probability a victim of sexual violence is a man is 0.2626.
     # This was used with our previous guesses to calculate the true proportions of malicious people. 
     # Of malicious people, men are 76.56% and women are 23.55%.
-    # Thus, with the probability someone is malicious of 0.02648, the probability a man
-    # is malicious is 0.020243 and the probability is 0.006236. (Again, this is ~20000x real life values)
+    # Thus, with the probability someone is malicious of 0.02648, the probability someone is malicious given that
+    # they are a man is 0.0405, and the probability someone is malicious given that they are a woman is 0.0139
+    # (Again, this is ~20000x real life values)
 
 # By running multiple simulations, we have determined that the probability an assault happens
 # when a malicious person is on a ride is 0.3938.
@@ -75,8 +76,8 @@ class Board:
         self.mTm = 1 - self.mTw              #PROBABILITY A MALICIOUS MAN TARGETS MEN
         self.wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
-        self.probMaliciousMan = 0.02023    #PROBABILITY A MAN IS MALICIOUS
-        self.probMaliciousWoman = 0.00625  #PROBABILITY A WOMAN IS MALICIOUS
+        self.probMaliciousMan = 0.0405    #PROBABILITY A MAN IS MALICIOUS
+        self.probMaliciousWoman = 0.0139  #PROBABILITY A WOMAN IS MALICIOUS
         self.probAssault = 0.345	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION

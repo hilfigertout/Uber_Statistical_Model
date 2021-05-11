@@ -11,12 +11,13 @@ class Board:
     numDays = 50
     def __init__(self):
         self.ridersPer = 20             #NUMBER OF RIDERS GENERATED PER DRIVER
-        self.probMalicious = 0.01324    #PROBABILITY A DRIVER OR RIDER IS MALICIOUS, APPROX. 10000x REAL LIFE
+        self.probMalicious = 0.02648   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS, APPROX. 20000x REAL LIFE
         self.probAssault = 0.5      #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
         self.assaults = []          #TRACKS ASSAULTS BY DAY 
+        self.rides = []             #TRACKS RIDES BY DAY
         self.activeRiders = set()      #SET OF RIDERS WHO NEED A RIDE THAT DAY
         self.activeDrivers = set()     #SET OF DRIVERS WHO CAN STILL GIVE A RIDE THAT DAY
         self.driversToRemove = set()   #SET OF DRIVERS NOT ACTIVE AFTER EACH BATCH OF RIDES
@@ -43,6 +44,7 @@ class Board:
 
         for day in range(self.numDays):
             self.assaults.append(0)
+            self.rides.append(0)
             self.day = day
             self.activeDrivers = self.setDrivers.copy()
 
@@ -111,6 +113,7 @@ class Driver:
                 else:
                     rider = None
             if (not rider is None):
+                board.rides[board.day] = board.rides[board.day] + 1
                 if ((self.isMalicious or rider.isMalicious) and (r.random() < board.probAssault)):  #Assault occurs     
                     board.assaults[board.day] = board.assaults[board.day] + 1
                     self.ridersInRange.remove(rider)
@@ -142,11 +145,17 @@ class Rider:
 
 r.seed(1095)
 totalAssaults = []
+totalRides = []
 for i in range(50):
-	b = Board()
-	b.runSim()
-	totalAssaults.append(sum(b.assaults))
-	print("sim " + str(i) + " completed.")
-print(str(totalAssaults))
-mean = sum(totalAssaults)/len(totalAssaults)
-print(str(mean))
+    b = Board()
+    b.runSim()
+    totalAssaults.append(sum(b.assaults))
+    totalRides.append(sum(b.rides))
+    print("sim " + str(i) + " completed.")
+
+print("Rides: " + str(totalRides))
+meanRides = sum(totalRides)/len(totalRides)
+print(str(meanRides))
+print("Assaults: " + str(totalAssaults))
+meanAssaults = sum(totalAssaults)/len(totalAssaults)
+print(str(meanAssaults))
