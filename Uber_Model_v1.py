@@ -10,9 +10,9 @@ class Board:
     numDrivers = 1000
     numDays = 50
     def __init__(self):
-        self.ridersPer = 20             #NUMBER OF RIDERS GENERATED PER DRIVER
+        self.ridersPer = 20.6              #NUMBER OF RIDERS GENERATED PER DRIVER
         self.probMalicious = 0.02648   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS, APPROX. 20000x REAL LIFE
-        self.probAssault = 0.5      #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probAssault = 0.082      #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -25,10 +25,13 @@ class Board:
         for i in range(self.numDrivers):
             self.setDrivers.add(Driver(self))
 
-        for i in range(self.ridersPer*self.numDrivers):         #Generate 20 riders per driver
+        for i in range(int(self.ridersPer*self.numDrivers)):         #Generate 20 riders per driver
             rx = r.uniform(0, 10)
             ry = r.uniform(0, 10)
             self.setRiders.add(Rider(self, rx, ry))
+
+        for driver in (self.setDrivers):
+            driver.findRidersInRange(self)
 
         for rider in self.setRiders:
             active = rider.nextDay()
@@ -123,7 +126,7 @@ class Driver:
             
 
 class Rider:
-    probNeedRide = 0.331                #PROBABILITY RIDER NEEDS A RIDE
+    probNeedRide = 0.181                #PROBABILITY RIDER NEEDS A RIDE
     def __init__(self, board, rx, ry):
         self.needRide = False               #INDICATES IF RIDER NEEDS A RIDE THAT DAY
         self.coords = (rx, ry)              #COORDINATES OF THE RIDER
@@ -143,7 +146,7 @@ class Rider:
 
 
 
-r.seed(1095)
+r.seed(1325)
 totalAssaults = []
 totalRides = []
 for i in range(50):

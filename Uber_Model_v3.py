@@ -67,7 +67,7 @@ class Board:
     numDays = 50
     
     def __init__(self):
-        self.ridersPer = 20             #NUMBER OF RIDERS GENERATED PER DRIVER
+        self.ridersPer = 20.6              #NUMBER OF RIDERS GENERATED PER DRIVER
         self.mPreference = 0.4          #PROBABILITY A NON-MALICIOUS MAN HAS A PREFERRED DRIVER SEX
         self.mPw = 0.5                  #PROBABILITY A NON-MALICIOUS MAN PREFERS FEMALE DRIVERS
         self.wPreference = 0.6         #PROBABILITY A WOMAN HAS A PREFERRED DRIVER SEX
@@ -91,7 +91,7 @@ class Board:
         for i in range(self.numDrivers):            #Generate drivers
             self.setDrivers.add(Driver(self))
 
-        for i in range(self.ridersPer*self.numDrivers):         #Generate 20 riders per driver
+        for i in range(int(self.ridersPer*self.numDrivers)):         #Generate 20 riders per driver
             rx = r.uniform(0, 10)
             ry = r.uniform(0, 10)
             self.setRiders.add(Rider(self, rx, ry))

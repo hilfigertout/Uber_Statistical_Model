@@ -57,14 +57,14 @@ class Board:
     numDays = 50
     
     def __init__(self):
-        self.ridersPer = 20             #NUMBER OF RIDERS GENERATED PER DRIVER
+        self.ridersPer = 20.6             #NUMBER OF RIDERS GENERATED PER DRIVER
         self.mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
         self.mTm = 1 - self.mTw              #PROBABILITY A MALICIOUS MAN TARGETS MEN
         self.wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
         self.probMaliciousMan = 0.0405    #PROBABILITY A MAN IS MALICIOUS
         self.probMaliciousWoman = 0.0139  #PROBABILITY A WOMAN IS MALICIOUS
-        self.probAssault = 0.345	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probAssault = 0.1693	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -74,10 +74,10 @@ class Board:
         self.activeDrivers = set()     #SET OF DRIVERS WHO CAN STILL GIVE A RIDE THAT DAY
         self.driversToRemove = set()   #SET OF DRIVERS NOT ACTIVE AFTER EACH BATCH OF RIDES
         
-        for i in range(self.numDrivers):
+        for i in range(self.numDrivers):                             #Generate Driveres      
             self.setDrivers.add(Driver(self))
 
-        for i in range(self.ridersPer*self.numDrivers):         #Generate 20 riders per driver
+        for i in range(int(self.ridersPer*self.numDrivers)):         #Generate riders
             rx = r.uniform(0, 10)
             ry = r.uniform(0, 10)
             self.setRiders.add(Rider(self, rx, ry))
@@ -255,7 +255,7 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1212)		#Set Seed
+r.seed(1101)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations
