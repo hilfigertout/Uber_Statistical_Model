@@ -11,8 +11,8 @@ class Board:
     numDays = 50
     def __init__(self):
         self.ridersPer = 20.6              #NUMBER OF RIDERS GENERATED PER DRIVER
-        self.probMalicious = 0.02648   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS, APPROX. 20000x REAL LIFE
-        self.probAssault = 0.082      #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probMalicious = 0.02819   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS, APPROX. 1000x REAL LIFE
+        self.probAssault = 0.5      #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY

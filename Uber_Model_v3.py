@@ -23,10 +23,13 @@ from scipy import stats
 # In 2017, 36.1 % of Uber drivers were female. (source 1)
 
 # In the 2017-2018 period, there were 3045 sexual assaults in 2.3 billion rides (Source 1)
-    # Assuming each one is a unique person, this means that ~0.00013% of users are malicious. 
-    # To ensure this has a meaningful impact on our model, we are scaling this up by a factor of 20000.
-    # So the probability a person is malicious in our model 0.02648. 
-    # This means we expect to see ~834 assaults over the 50 days of the model, average of 16.68 per day.
+    # Assuming each one is a unique person, this means that of the 108 million people ~0.0028% of them are malicious. 
+    # To ensure this has a meaningful impact on our model, we are scaling this up by a factor of 1000.
+    # So the probability a person is malicious in our model 0.02819.
+    # 
+    # ???????? 
+    # All told, with 1000 times more assaults than real life, we expect to see ~42 assaults over 
+    # the 50 days of the model.
 
 # In a study, 98.1% of female rape victims and 92.5% of female non-rape sex crime victims reported male perpetrators. (Source 2)
     # We will average this to say ~95% of female sexual assault victims will report male perpetrators. This means mTw ~ 19x wTw
@@ -67,7 +70,7 @@ class Board:
     numDays = 50
     
     def __init__(self):
-        self.ridersPer = 20.6              #NUMBER OF RIDERS GENERATED PER DRIVER
+        self.ridersPer = 20.6            #NUMBER OF RIDERS GENERATED PER DRIVER
         self.mPreference = 0.4          #PROBABILITY A NON-MALICIOUS MAN HAS A PREFERRED DRIVER SEX
         self.mPw = 0.5                  #PROBABILITY A NON-MALICIOUS MAN PREFERS FEMALE DRIVERS
         self.wPreference = 0.6         #PROBABILITY A WOMAN HAS A PREFERRED DRIVER SEX
