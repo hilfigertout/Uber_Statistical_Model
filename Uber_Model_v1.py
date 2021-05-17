@@ -7,13 +7,15 @@ import math
 
 
 class Board:
+    #ADJUSTABLE VARIABLES
     numDrivers = 1000       #NUMBER OF DRIVERS IN OUR MODEL
     numDays = 50            #NUMBER OF DAYS THE MODEL RUNS FOR
     probMalicious = 0.0027   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
     assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
-    
+    ridersPer = 20.6              #NUMBER OF RIDERS GENERATED PER DRIVER
+
     def __init__(self):
-        self.ridersPer = 20.6              #NUMBER OF RIDERS GENERATED PER DRIVER
+
         self.probAssault = self.assaultsPerRide / (2*self.probMalicious - self.probMalicious**2) #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION

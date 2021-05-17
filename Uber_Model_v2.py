@@ -17,16 +17,20 @@ from scipy import stats
     # Running the sim while counting the number of rides with this parameter shows that it works. 
 
 # For those 5 million drivers, Uber claims to have 103 million average monthly users. (Source 1)
-    # This means an average of 20.6 riders per driver. We will give each driver 20 riders, on the argument that
-    # each driver needs to have at least that many to sustain themselves.
+    # This means an average of 20.6 riders per driver. We will generate 20.6*1000 riders and scatter them
+    # randomly about the board. 
 
 # In 2017, 36.1 % of Uber drivers were female. (source 1)
 
-# In the 2017-2018 period, there were 3045 sexual assaults in 2.3 billion rides (Source 1)
-    # Assuming each one is a unique person, this means that ~0.00013% of users are malicious. 
-    # To ensure this has a meaningful impact on our model, we are scaling this up by a factor of 20000.
-    # So the probability a person is malicious in our model 0.02648. 
-    # This means we expect to see ~834 assaults over the 50 days of the model, average of 16.68 per day.
+# In the 2017-2018 period, Uber reported 3045 sexual assaults in 2.3 billion rides (Source 1)
+    # Assuming this rate of "assaults per ride" still holds, we expect to see about 0.24 assaults in the fifty days of 
+    # our simulation. Since that's absoultely tiny, we are going to scale it up by multiplying this "assaults per ride" 
+    # parameter by 2000. Thus, we expect to see about 495 assaults per 50-day sim, on average. 
+
+# The probability of an assault happening on a ride is assumed to be equal to the probability that at least one of the
+# riders is malicious AND that an assault happens. The parameter to be adjusted in order to tune the model to match reality
+# is the proportion of malicious people in the model. (While this joint probability is going to be 2000 times as high as 
+# real life, we cannot say for certain if our model has 2000 times as many malicious people as real life.)
 
 # In a study, 98.1% of female rape victims and 92.5% of female non-rape sex crime victims reported male perpetrators. (Source 2)
     # We will average this to say ~95% of female sexual assault victims will report male perpetrators. This means mTw ~ 19x wTw
@@ -39,12 +43,7 @@ from scipy import stats
 # With some calculations from the CDC estimates (Source 2), we see that the probability a victim of sexual violence is a man is 0.2626.
     # This was used with our previous guesses to calculate the true proportions of malicious people. 
     # Of malicious people, men are 76.56% and women are 23.55%.
-    # Thus, with the probability someone is malicious of 0.02648, the probability someone is malicious given that
-    # they are a man is 0.0405, and the probability someone is malicious given that they are a woman is 0.0139
-    # (Again, this is ~20000x real life values)
 
-# By running multiple simulations, we have determined that the probability an assault happens
-# when a malicious person is on a ride is 0.3938.
 
 
 
@@ -53,18 +52,23 @@ from scipy import stats
 
 
 class Board:
+    #ADJUSTABLE VARIABLES
     numDrivers = 1000
     numDays = 50
+    probMalicious = 0.0027   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
+    ridersPer = 20.6             #NUMBER OF RIDERS GENERATED PER DRIVER
+    mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
+    wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
+    pMM = 0.7656        #PROBABILITY A MALICIOUS PERSON IS A MAN  
     
     def __init__(self):
-        self.ridersPer = 20.6             #NUMBER OF RIDERS GENERATED PER DRIVER
-        self.mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
         self.mTm = 1 - self.mTw              #PROBABILITY A MALICIOUS MAN TARGETS MEN
-        self.wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
-        self.probMaliciousMan = 0.0405    #PROBABILITY A MAN IS MALICIOUS
-        self.probMaliciousWoman = 0.0139  #PROBABILITY A WOMAN IS MALICIOUS
-        self.probAssault = 0.1693	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probMaliciousMan = self.probMalicious*self.pMM         #PROBABILITY A MAN IS MALICIOUS
+        self.probMaliciousWoman = self.probMalicious*(1-self.pMM)   #PROBABILITY A WOMAN IS MALICIOUS
+        self.probMalOnRide = 2*self.probMalicious - self.probMalicious**2   #PROBABILITY A RIDER OR DRIVER IS MALICIOUS
+        self.probAssault = self.assaultsPerRide / (self.probMalOnRide)	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
