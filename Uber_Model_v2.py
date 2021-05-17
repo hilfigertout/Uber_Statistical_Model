@@ -61,7 +61,7 @@ class Board:
     mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
     wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
     pMM = 0.7656        #PROBABILITY A MALICIOUS PERSON IS A MAN  
-    
+
     def __init__(self):
         self.mTm = 1 - self.mTw              #PROBABILITY A MALICIOUS MAN TARGETS MEN
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
@@ -289,10 +289,10 @@ print("Reject Ho = " + str((p < alpha)))
 
 print("Assaults test: ")
 alpha = 0.05
-print("Ho: mu = 834")
-print("Ha: mu != 834")
+print("Ho: mu = 495")
+print("Ha: mu != 495")
 print("Significance level = " + str(alpha))
-s, p = scipy.stats.ttest_1samp(total_assaults, 834.0, alternative="two-sided")
+s, p = scipy.stats.ttest_1samp(total_assaults, 495.0, alternative="two-sided")
 print("P_value = " + str(p))
 print("Reject Ho = " + str((p < alpha)))
 
