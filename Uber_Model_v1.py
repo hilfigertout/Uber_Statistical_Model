@@ -9,11 +9,12 @@ import math
 class Board:
     numDrivers = 1000       #NUMBER OF DRIVERS IN OUR MODEL
     numDays = 50            #NUMBER OF DAYS THE MODEL RUNS FOR
-    probMalicious = 0.02819   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    probMalicious = 0.002819   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
     
     def __init__(self):
         self.ridersPer = 20.6              #NUMBER OF RIDERS GENERATED PER DRIVER
-        self.probAssault = 0.02678 / self.probMalicious       #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        self.probAssault = self.assaultsPerRide / (2*self.probMalicious - self.probMalicious**2) #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -147,7 +148,7 @@ class Rider:
 
 
 
-r.seed(1225)
+r.seed(1212)
 totalAssaults = []
 totalRides = []
 for i in range(50):
