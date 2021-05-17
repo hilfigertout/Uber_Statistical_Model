@@ -9,7 +9,7 @@ import math
 class Board:
     numDrivers = 1000       #NUMBER OF DRIVERS IN OUR MODEL
     numDays = 50            #NUMBER OF DAYS THE MODEL RUNS FOR
-    probMalicious = 0.002819   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    probMalicious = 0.0027   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
     assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
     
     def __init__(self):
