@@ -67,8 +67,10 @@ class Board:
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
         self.probMaliciousMan = self.probMalicious*self.pMM         #PROBABILITY A MAN IS MALICIOUS
         self.probMaliciousWoman = self.probMalicious*(1-self.pMM)   #PROBABILITY A WOMAN IS MALICIOUS
-        self.probMalOnRide = 2*self.probMalicious - self.probMalicious**2   #PROBABILITY A RIDER OR DRIVER IS MALICIOUS
-        self.probAssault = self.assaultsPerRide / (self.probMalOnRide)	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+        probDriverMal = Driver.probMale*self.probMaliciousMan + (1-Driver.probMale)*self.probMaliciousWoman
+        probRiderMal = Rider.probMale*self.probMaliciousMan + (1-Rider.probMale)*self.probMaliciousWoman
+        probMalOnRide = probDriverMal + probRiderMal - (probDriverMal*probRiderMal) 
+        self.probAssault = self.assaultsPerRide / probMalOnRide	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -259,7 +261,7 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1101)		#Set Seed
+r.seed(3202)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations
