@@ -267,7 +267,7 @@ class Rider:
 r.seed(1331)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
-for i in range(5):	#Run 50 simulations
+for i in range(50):	#Run 50 simulations
     b = Board()
     b.runSim()
     print("Simulation " + str(i) + " complete! ")
