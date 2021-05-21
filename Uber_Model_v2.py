@@ -57,7 +57,7 @@ class Board:
     expectedAssaults = 495  #AVERAGE NUMVER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
     numDrivers = 1000       #NUMBER OF DRIVERS IN THE SIMULATION
     numDays = 50            #NUMBER OF DAYS THE SIMULATION RUNS FOR
-    probMalicious = 0.0113   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    probMalicious = 0.00561   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
     probAssault = 0.491	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
     assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
     ridersPer = 20.6             #NUMBER OF RIDERS GENERATED PER DRIVER
@@ -68,8 +68,8 @@ class Board:
     def __init__(self):
         self.mTm = 1 - self.mTw              #PROBABILITY A MALICIOUS MAN TARGETS MEN
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
-        self.probMaliciousMan = self.probMalicious*self.pMM         #PROBABILITY A MAN IS MALICIOUS
-        self.probMaliciousWoman = self.probMalicious*(1-self.pMM)   #PROBABILITY A WOMAN IS MALICIOUS
+        self.probMaliciousMan = self.probMalicious*self.pMM*2         #PROBABILITY A MAN IS MALICIOUS
+        self.probMaliciousWoman = self.probMalicious*(1-self.pMM)*2   #PROBABILITY A WOMAN IS MALICIOUS
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -222,7 +222,7 @@ class Driver:
 
 class Rider:
     # ADJUSTABLE VARIABLES
-    probNeedRide = 0.18181              #PROBABILITY RIDER NEEDS A RIDE
+    probNeedRide = 0.1815             #PROBABILITY RIDER NEEDS A RIDE
     probMale = 0.5                      #PROBABILITY THE RIDER IS MALE
 
     def __init__(self, board, rx, ry):
@@ -264,7 +264,7 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1331)		#Set Seed
+r.seed(1321)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations
