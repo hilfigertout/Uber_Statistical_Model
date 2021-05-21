@@ -53,9 +53,12 @@ from scipy import stats
 
 class Board:
     #ADJUSTABLE VARIABLES
-    numDrivers = 1000
-    numDays = 50
-    probMalicious = 0.0027   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    expectedRides = 187000  #AVERAGE NUMBER OF RIDES EXPECTED OVER THE COURSE OF THE SIMULATION
+    expectedAssaults = 495  #AVERAGE NUMVER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
+    numDrivers = 1000       #NUMBER OF DRIVERS IN THE SIMULATION
+    numDays = 50            #NUMBER OF DAYS THE SIMULATION RUNS FOR
+    probMalicious = 0.0113   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    probAssault = 0.491	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
     assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
     ridersPer = 20.6             #NUMBER OF RIDERS GENERATED PER DRIVER
     mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
@@ -67,10 +70,6 @@ class Board:
         self.wTw = 1 - self.wTm              #PROBABILITY A MALICIOUS WOMAN TERGETS WOMEN
         self.probMaliciousMan = self.probMalicious*self.pMM         #PROBABILITY A MAN IS MALICIOUS
         self.probMaliciousWoman = self.probMalicious*(1-self.pMM)   #PROBABILITY A WOMAN IS MALICIOUS
-        probDriverMal = Driver.probMale*self.probMaliciousMan + (1-Driver.probMale)*self.probMaliciousWoman
-        probRiderMal = Rider.probMale*self.probMaliciousMan + (1-Rider.probMale)*self.probMaliciousWoman
-        probMalOnRide = probDriverMal + probRiderMal - (probDriverMal*probRiderMal) 
-        self.probAssault = self.assaultsPerRide / probMalOnRide	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
         self.setDrivers = set()       #SET OF DRIVERS IN THE SIMULATION
         self.setRiders = set()       #SET OF RIDERS IN THE SIMULATION
         self.day = 0                #GETTER FOR CURRENT DAY
@@ -131,8 +130,10 @@ class Board:
 
 
 class Driver:
+    #ADJUSTABLE VARIABLES
     probMale = 0.639             #PROBABILITY THE DRIVER IS MALE
     radius = 1                  #RADIUS THE DRIVER CAN GIVE RIDES IN
+
     def __init__(self, board):
         self.ridesGiven = 0            #NUMBER OF RIDES GIVEN THAT DAY
         xcoord = r.uniform(0, 10)
@@ -220,8 +221,10 @@ class Driver:
             
 
 class Rider:
-    probNeedRide = 0.187               #PROBABILITY RIDER NEEDS A RIDE
+    # ADJUSTABLE VARIABLES
+    probNeedRide = 0.18181              #PROBABILITY RIDER NEEDS A RIDE
     probMale = 0.5                      #PROBABILITY THE RIDER IS MALE
+
     def __init__(self, board, rx, ry):
         self.male = False                   #INDICATES THE SEX OF THE RIDER
         self.needRide = False               #INDICATES IF RIDER NEEDS A RIDE THAT DAY
@@ -261,10 +264,10 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(3202)		#Set Seed
+r.seed(1331)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
-for i in range(50):	#Run 50 simulations
+for i in range(5):	#Run 50 simulations
     b = Board()
     b.runSim()
     print("Simulation " + str(i) + " complete! ")
@@ -281,20 +284,20 @@ print(str(total_assaults))
 # Significance tests
 print("Rides test: ")
 alpha = 0.05
-print("Ho: mu = 187000")
-print("Ha: mu != 187000")
+print("Ho: mu = " + str(Board.expectedRides))
+print("Ha: mu != " + str(Board.expectedRides))
 print("Significance level = " + str(alpha))
-s, p = scipy.stats.ttest_1samp(total_rides, 187000.0, alternative="two-sided")
+s, p = scipy.stats.ttest_1samp(total_rides, Board.expectedRides, alternative="two-sided")
 print("P_value = " + str(p))
 print("Reject Ho = " + str((p < alpha)))
 
 
 print("Assaults test: ")
 alpha = 0.05
-print("Ho: mu = 495")
-print("Ha: mu != 495")
+print("Ho: mu = " + str(Board.expectedAssaults))
+print("Ha: mu != " + str(Board.expectedAssaults))
 print("Significance level = " + str(alpha))
-s, p = scipy.stats.ttest_1samp(total_assaults, 495.0, alternative="two-sided")
+s, p = scipy.stats.ttest_1samp(total_assaults, Board.expectedAssaults, alternative="two-sided")
 print("P_value = " + str(p))
 print("Reject Ho = " + str((p < alpha)))
 
