@@ -43,7 +43,10 @@ from scipy import stats
 # With some calculations from the CDC estimates (Source 2), we see that the probability a victim of sexual violence is a man is 0.2626.
     # This was used with our previous guesses to calculate the true proportions of malicious people. 
     # Of malicious people, men are 76.56% and women are 23.55%.
+    # Using conditional probability, we can create a formula for the proportions of men and women who are malicious. 
 
+# From tuning model v1, we reached a probability that a ride with a malicious person ends in an assault is 0.491. We will fix this
+    # value in place, and tune this model by varying the proportion of people who are malicious. 
 
 
 
@@ -54,7 +57,7 @@ from scipy import stats
 class Board:
     #ADJUSTABLE VARIABLES
     expectedRides = 187000  #AVERAGE NUMBER OF RIDES EXPECTED OVER THE COURSE OF THE SIMULATION
-    expectedAssaults = 495  #AVERAGE NUMVER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
+    expectedAssaults = 495  #AVERAGE NUMBER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
     numDrivers = 1000       #NUMBER OF DRIVERS IN THE SIMULATION
     numDays = 50            #NUMBER OF DAYS THE SIMULATION RUNS FOR
     probMalicious = 0.00561   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
@@ -126,7 +129,7 @@ class Board:
             for driver in self.setDrivers:
                 driver.nextDay()
 
-            #print("Day " + str(day) + " completed")
+            #print("Day " + str(day + 1) + " completed")
 
 
 class Driver:
@@ -270,7 +273,7 @@ total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations
     b = Board()
     b.runSim()
-    print("Simulation " + str(i) + " complete! ")
+    print("Simulation " + str(i + 1) + " complete! ")
     total_assaults.append(sum(b.assaults))
     total_rides.append(sum(b.rides))
 
