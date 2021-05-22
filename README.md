@@ -36,13 +36,15 @@ replacing the "#" with the number of the model you wish to run.
 
 1000 drivers are randomly placed on a 10x10 coordinate grid. Then, for each driver, between 20 and 21 riders are randomly scattered around the board. (There is significant overlap between the drivers that can service each rider.) 
 
-Each "day" in the simulation, some portion of the riders will want a ride. One of the drivers within a radius of 1 unit of the rider will service that request. (Each driver can service up to 10 riders per day. The order they service riders in changes each day.) Some percentage of drivers and riders will be malicious. If either the driver or the rider is malicious (or both) and they are riding with a preferred target, there is a chance an assault will occur. (This will not happen 100% of the time, partly because that's what will happen realistically.) If an assault occurs, that rider and driver will never ride with each other again. 
+Each "day" in the simulation, some portion of the riders will want a ride. One of the drivers within a radius of 1 unit of the rider will service that request. (Each driver can service up to 10 riders per day. The order they service riders in changes each day.) Some percentage of drivers and riders will be "malicious"\*. If either the driver or the rider is malicious (or both) and they are riding with a preferred target, there is a chance an assault will occur. (This will not happen 100% of the time, partly because that's what will happen realistically.) If an assault occurs, that rider and driver will never ride with each other again. 
 
 Once all riders have been serviced or no drivers are left to service those still available, the day ends and the next day is set up, with a new selection of riders needing rides. The simulation  runs for 50 days and tracks the number of sexual assaults that occur each day and the number of rides that occur each day.
 
 In model v1, preferred targets were not implemented; if a malicious person was on a ride, an assault always had a chance of occurring. Model v2 introduced sexes. Each user is either male or female, and each malicious person has a preferred target sex. An assault only has a chance of happening if a malicious person rides with someone they consider a preferred target. (ex: if a malicious man targets other men, but rides with a woman, an assault will not happen.) 
 
 Model v3 implements rider choice. Riders can indicate a preference for either male or female drivers, which is determined when the rider is initialized. Some proportion of users, both malicious and non-malicious, will utilize this function. A driver will not pick up someone who indicates a different preferred driver sex unless there is nobody else in range that they can give a ride to. (i.e. if a male driver sees 2 riders who prefer female drivers and 1 user with no preference, they will pick up the user with no preference. If, instead, he saw 3 riders who prefer female drivers, he would just pick one of them up regardless.) This is under the assumption that a driver will focus on making money by giving rides, and will disregard the preference if there are no other options. 
+
+\* "malicious" in this context only refers to willingness to commit sexual assault. It does not indicate propensity towards any other crime or immoral action, which is not being measured in this model. 
 
 ## POTENTIAL PROBLEMS WITH THE MODEL:
 
@@ -72,7 +74,7 @@ Thus, we conclude that allowing Uber riders to choose the sex of their driver wi
   - The post that inspired this project.
 
 - http://web.archive.org/web/20210423034332/https://www.businessofapps.com/data/uber-statistics/, accessed 3 May 2021
-  - Statistics on the use of Uber and their safety report, used to lock down several model parameters.
+  - Statistics on the use of Uber and their safety report, used to estimate several model parameters.
 
 - https://www.cdc.gov/violenceprevention/pdf/nisvs_report2010-a.pdf, accessed 3 May 2021
-  - A report on sexual assault including statistics around victims and perpetrators, used to calculate the proportion of men and women who are malicious. 
+  - A report on sexual assault including statistics around victims and perpetrators, used to calculate the proportion of men and women who are "malicious" in the model. 
