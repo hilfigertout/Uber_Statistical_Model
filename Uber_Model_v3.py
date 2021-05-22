@@ -250,7 +250,7 @@ class Driver:
 
 class Rider:
     #ADJUSTABLE VARIABLES
-    probNeedRide = 0.1815               #PROBABILITY RIDER NEEDS A RIDE
+    probNeedRide = 0.1816               #PROBABILITY RIDER NEEDS A RIDE
     probMale = 0.5                      #PROBABILITY THE RIDER IS MALE
     probOpportunist = 0.5               #PROBABILITY A MALICIOUS RIDER IS OPPORTUNISTIC
 

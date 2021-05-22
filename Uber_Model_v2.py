@@ -225,7 +225,7 @@ class Driver:
 
 class Rider:
     # ADJUSTABLE VARIABLES
-    probNeedRide = 0.1815             #PROBABILITY RIDER NEEDS A RIDE
+    probNeedRide = 0.1816             #PROBABILITY RIDER NEEDS A RIDE
     probMale = 0.5                      #PROBABILITY THE RIDER IS MALE
 
     def __init__(self, board, rx, ry):
