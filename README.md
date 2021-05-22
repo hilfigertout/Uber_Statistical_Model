@@ -1,4 +1,4 @@
-# Uber_Statisical_Model
+# Uber_Statistical_Model
 
 This project aims to build a mathematical simulation model of a rideshare service with riders and drivers in a relatively densely populated city. The goal is to track the number of sexual assaults that occur and see what effects certain policy changes have, i.e. giving riders the ability to indicate a preferred gender of driver. 
 
