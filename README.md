@@ -48,9 +48,9 @@ Model v3 implements rider choice. Riders can indicate a preference for either ma
 
 - Malicious users will never again ride with someone they have assaulted, and the simulation never adds new people. Thus, the number of assaults drops sharply (and unrealistically) if the simulation runs for long enough. To account for this, the simulation only runs for 50 days, where this effect is negligible. 
 
-- With 1000 drivers, we expect our model to proportionally give 187000 rides in its 50 simulated days. Using the actual real-world values of assaults per ride (3045 in 2.3 billion rides), our model would give us an average 0.248 assaults in the expected 187000 rides, which is too small to notice any effect. In order to combat this, the model is tuned to give us 2000 times as many assaults as in real life. (about 495 on average) This should not be an issue, as we are only examining the difference. We're setting the values from model v2 as the baseline and examining the difference in model v3.
+- With 1000 drivers, we expect our model to proportionally give 187000 rides in its 50 simulated days. Using the actual real-world values of assaults per ride (3045 in 2.3 billion rides), our model would give us an average 0.248 assaults in the expected 187000 rides, which is too small to notice any effect. In order to combat this, the model is tuned to give us 2000 times as many assaults as in real life - about 495 on average - by increasing the number of malicious people and the probability a ride with a malicious person ends in an assault. This should not be an issue, as we are only examining the difference. We're setting the values from model v2 as the baseline and examining the difference in model v3.
 
-- We assumed that drivers - even malicious drivers - do not make intentional decisions about who to give a ride to. The reasoning for this is that drivers need to make sufficient money by giving rides, and that they would not let personal feelings get in the way of that. In reality, people are complex and irrational, and it's possible malicious drivers could choose to pick up someone they consider a target. 
+- We assumed that drivers - even malicious drivers - do not make intentional decisions about who to give a ride to. The reasoning for this is that drivers need to make sufficient money by giving rides, and that they would not let personal feelings get in the way of that. In reality, people are complex and irrational, and it's possible malicious drivers could choose to pick up someone they consider a target despite economic incentive. 
 
 - While the proportions of malicious men/women that target each sex are interrelated, they were ultimately based on an estimation. By extension, the proportion of men who are malicious and the proportion of women who are malicious in our model were calculated based off of that guess. 
 
@@ -58,6 +58,8 @@ Model v3 implements rider choice. Riders can indicate a preference for either ma
 
 
 ## RESULTS
+
+For 1000 drivers in a 50-day simulation, we expect a total of 187000 rides and 495 sexual assaults. 
 
 In model v2, with random table seed set to 1321, we had an average of 187017.8 rides and 491.44 assaults per simulation run. This is close enough to the expected values that we can say model v2 matches reality. Then, running model v3 with seed set to 2112, we had averages of 187009.7 rides and 625.3 assaults per simulation. The number of rides lines up, but the number of assaults increased by 26.3%. Our student's t-test at the end of model v3 on the average number of assaults rejects its null hypothesis, so this difference is statistically significant.
 
@@ -67,10 +69,10 @@ Thus, we conclude that allowing Uber riders to choose the sex of their driver wi
 ## SOURCES
 
 - https://www.reddit.com/r/AskWomen/comments/mivewb/what_do_you_think_about_having_the_option_to/
-- - The post that inspired this project.
+  - The post that inspired this project.
 
 - http://web.archive.org/web/20210423034332/https://www.businessofapps.com/data/uber-statistics/, accessed 3 May 2021
-- - Statistics on the use of Uber and their safety report, used to lock down several model parameters.
+  - Statistics on the use of Uber and their safety report, used to lock down several model parameters.
 
 - https://www.cdc.gov/violenceprevention/pdf/nisvs_report2010-a.pdf, accessed 3 May 2021
-- - A report on sexual assault including statistics around victims and perpetrators, used to calculate the proportion of men and women who are malicious. 
+  - A report on sexual assault including statistics around victims and perpetrators, used to calculate the proportion of men and women who are malicious. 
