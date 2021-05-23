@@ -22,15 +22,15 @@ from scipy import stats
 
 # In 2017, 36.1 % of Uber drivers were female. (source 1)
 
-# In the 2017-2018 period, Uber reported 3045 sexual assaults in 2.3 billion rides (Source 1)
-    # Assuming this rate of "assaults per ride" still holds, we expect to see about 0.24 assaults in the fifty days of 
+# In 2018, Uber reported 3045 sexual assaults in 1.3 billion rides (Source 1)
+    # Assuming this rate of "assaults per ride" still holds, we expect to see about 0.438 assaults in the fifty days of 
     # our simulation. Since that's absoultely tiny, we are going to scale it up by multiplying this "assaults per ride" 
-    # parameter by 2000. Thus, we expect to see about 495 assaults per 50-day sim, on average. 
+    # parameter by 1000. Thus, we expect to see about 432 assaults per 50-day sim, on average. 
 
 # The probability of an assault happening on a ride is assumed to be equal to the probability that at least one of the
 # riders is malicious AND that an assault happens. The parameter to be adjusted in order to tune the model to match reality
-# is the proportion of malicious people in the model. (While this joint probability is going to be 2000 times as high as 
-# real life, we cannot say for certain if our model has 2000 times as many malicious people as real life.)
+# is the proportion of malicious people in the model. (While this joint probability is going to be 1000 times as high as 
+# real life, we cannot say for certain if our model has 1000 times as many malicious people as real life.)
 
 # In a study, 98.1% of female rape victims and 92.5% of female non-rape sex crime victims reported male perpetrators. (Source 2)
     # We will average this to say ~95% of female sexual assault victims will report male perpetrators. This means mTw ~ 19x wTw
@@ -57,7 +57,7 @@ from scipy import stats
 class Board:
     #ADJUSTABLE VARIABLES
     expectedRides = 187000  #AVERAGE NUMBER OF RIDES EXPECTED OVER THE COURSE OF THE SIMULATION
-    expectedAssaults = 495  #AVERAGE NUMBER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
+    expectedAssaults = 438  #AVERAGE NUMBER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
     numDrivers = 1000       #NUMBER OF DRIVERS IN THE SIMULATION
     numDays = 50            #NUMBER OF DAYS THE SIMULATION RUNS FOR
     probMalicious = 0.00561   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS

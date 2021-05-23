@@ -10,8 +10,8 @@ class Board:
     #ADJUSTABLE VARIABLES
     numDrivers = 1000       #NUMBER OF DRIVERS IN OUR MODEL
     numDays = 50            #NUMBER OF DAYS THE MODEL RUNS FOR
-    probMalicious = 0.0027   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
-    assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
+    probMalicious = 0.00285   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    assaultsPerRide = 0.002342      #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 1000 TIMES REAL LIFE.
     ridersPer = 20.6              #NUMBER OF RIDERS GENERATED PER DRIVER
 
     def __init__(self):
@@ -130,7 +130,7 @@ class Driver:
             
 
 class Rider:
-    probNeedRide = 0.181                #PROBABILITY RIDER NEEDS A RIDE
+    probNeedRide = 0.1816                #PROBABILITY RIDER NEEDS A RIDE
     def __init__(self, board, rx, ry):
         self.needRide = False               #INDICATES IF RIDER NEEDS A RIDE THAT DAY
         self.coords = (rx, ry)              #COORDINATES OF THE RIDER
@@ -150,7 +150,7 @@ class Rider:
 
 
 
-r.seed(1212)
+r.seed(1512)
 totalAssaults = []
 totalRides = []
 for i in range(50):
