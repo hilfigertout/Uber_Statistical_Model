@@ -16,6 +16,8 @@ The statistics used in this model are based off of Uber, simply because they hav
 
 - Uber_Model_v3.py - this iteration introduces the ability for riders to indicate a preferred sex for each driver. The purpose of this is to test what effect this change will have on the average number of sexual assaults over the simulation. Includes a student's t-test to ensure the average number of rides is close enough to the expected number, and another to determine if the change causes a change in the number of sexual assaults. *This is the model that is meant to test what happens when riders are given the option to indicate a preferred driver sex.*
 
+- Uber_Model_v4.py - this iteration is a copy of model v2 with some extra functions and tweaked parameters. It's been used to run some tests to see what can actually reduce the number of assaults. *This is a sandbox, meant to test various possible solutions to lower sexual assaults in rideshare services.*
+
 
 ## RUNNING THE SIMULATION
 
