@@ -45,8 +45,7 @@ from scipy import stats
     # Of malicious people, men are 76.56% and women are 23.55%.
     # Using conditional probability, we can create a formula for the proportions of men and women who are malicious. 
 
-# From tuning model v1, we reached a probability that a ride with a malicious person ends in an assault is 0.491. We will fix this
-    # value in place, and tune this model by varying the proportion of people who are malicious. 
+# We will assume the probability an assault happens on a ride with a malicious person is 0.5. 
 
 
 
@@ -60,7 +59,7 @@ class Board:
     expectedAssaults = 438  #AVERAGE NUMBER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
     numDrivers = 1000       #NUMBER OF DRIVERS IN THE SIMULATION
     numDays = 50            #NUMBER OF DAYS THE SIMULATION RUNS FOR
-    probMalicious = 0.00511   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
+    probMalicious = 0.005   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
     probAssault = 0.5	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
     assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
     ridersPer = 20.6             #NUMBER OF RIDERS GENERATED PER DRIVER

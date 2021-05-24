@@ -61,9 +61,9 @@ Model v3 implements rider choice. Riders can indicate a preference for either ma
 
 ## RESULTS
 
-For 1000 drivers in a 50-day simulation, we expect a total of 187000 rides and 495 sexual assaults. 
+For 1000 drivers in a 50-day simulation, we expect a total of 187000 rides and 432 sexual assaults. 
 
-In model v2, with random table seed set to 1321, we had an average of 187017.8 rides and 491.44 assaults per simulation run. This is close enough to the expected values that we can say model v2 matches reality. Then, running model v3 with seed set to 2112, we had averages of 187009.7 rides and 625.3 assaults per simulation. The number of rides lines up, but the number of assaults increased by 26.3%. Our student's t-test at the end of model v3 on the average number of assaults rejects its null hypothesis, so this difference is statistically significant.
+In model v2, with random table seed set to 1221, we had an average of 187047.9 rides and 423.5 assaults per simulation run. This is close enough to the expected values that we can say model v2 matches reality. Then, running model v3 with seed set to 2112, we had averages of 186988.7 rides and 525.8 assaults per simulation. The number of rides lines up, but the number of assaults increased by 20%. Our student's t-test at the end of model v3 on the average number of assaults rejects its null hypothesis, so this difference is statistically significant.
 
 Thus, we conclude that allowing Uber riders to choose the sex of their driver will - counterintuitively - *increase* the number of sexual assaults. By extention, it is reasonable to assume this applies to all rideshare services which have a mixed-sex target demographic. (i.e. this result should *not* be used to draw conclusions about women-only rideshare services.)
 
