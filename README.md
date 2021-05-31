@@ -69,6 +69,9 @@ In model v2, with random table seed set to 1221, we had an average of 187047.9 r
 
 Thus, we conclude that allowing Uber riders to choose the sex of their driver will - counterintuitively - *increase* the number of sexual assaults. By extention, it is reasonable to assume this applies to all rideshare services which have a mixed-sex target demographic. (i.e. this result should *not* be used to draw conclusions about women-only rideshare services.)
 
+Other alternative approaches were tested in model v4. Reducing the probability an assault occurs on a ride (meant to simulate making rides safer with reporting tools, surveillance, or barriers between riders and drivers) did cause a corresponding drop in assaults. Removing drivers after they had committed an assault and replacing them with a new person who may or may not be malicious was the most effective, more than halving the number of assaults. Making the gender ratio of Uber drivers 50/50 had no effect on the number of assaults. Banning malicious riders after an assault (under the assumption that the rider would simply make a new account a day or two later) had no effect on the number of assaults. Forcing drivers to only pick up people of the same sex did greatly reduce the number of assaults, but also caused roughly 1 in every 3 riders who wanted a ride to not be serviced.
+
+From all of this, we can conclude that the best approaches to successfully reducing sexual assaults on rideshare services are to have safety mechanisms in the rides themselves and to act quickly to remove and replace drivers who commit an assault. 
 
 ## SOURCES
 
