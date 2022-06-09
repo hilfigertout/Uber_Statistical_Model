@@ -5,48 +5,46 @@ import numpy
 import scipy
 from scipy import stats
 
-# Rideshare service simulation model that includes rider choice
+# Rideshare service simulation model that includes riders indicating their preferred driver sex
 # Author: Ian Roberts
 
 # SOURCES AND DERIVATIONS FROM V2: 
 
-# In 2019 and 2020, there were 5 million Uber drivers and 18.7 million trips per day, on average. (Source 1)
-    # This means that each driver makes an average of 3.74 trips per day. So for a minimum of 20 riders per driver,
-    # we will say the probability a rider needs a ride is 0.187
-    # For 1000 drivers, we expect to see approx. 3740 rides per day, 187000 rides over 50 days.
-    # Running the sim while counting the number of rides with this parameter shows that it works. 
-
-# For those 5 million drivers, Uber claims to have 103 million average monthly users. (Source 1)
-    # This means an average of 20.6 riders per driver. We will generate 20.6*1000 riders and scatter them
+# In 2019 and 2020, there were 5 million Uber drivers. For those 5 million drivers, Uber claims to have 111 million average monthly users.
+    # This means an average of 22.2 riders per driver. We will generate 22.2*d riders and scatter them
     # randomly about the board. 
 
-# In 2017, 36.1 % of Uber drivers were female. (source 1)
+#For those 5 million drivers, Uber claims there were 17.22 million trips per day, on average. 
+    # This means that each driver makes an average of 3.444 trips per day. So for a 22.2 riders per driver,
+    # we can say the probability a rider needs a ride is 0.1551
+    # For 1000 drivers, we expect to see approx. 3444 rides per day, 172200 rides over 50 days.
+    # Running the sim while counting the number of rides with this parameter shows that it works. 
 
-# In 2018, Uber reported 3045 sexual assaults in 1.3 billion rides (Source 1)
+# In 2018, Uber reported 3045 sexual assaults in 1.3 billion rides 
     # Assuming this rate of "assaults per ride" still holds, we expect to see about 0.438 assaults in the fifty days of 
-    # our simulation. Since that's absoultely tiny, we are going to scale it up by multiplying this "assaults per ride" 
-    # parameter by 1000. Thus, we expect to see about 432 assaults per 50-day sim, on average. 
+    # our simulation. Since that's absoultely tiny, we are going to artificially scale it up by a factor of 1000 so the variations
+    # are visible. Thus, we expect to see about 403.3 assaults per 50-day sim, on average. 
 
 # The probability of an assault happening on a ride is assumed to be equal to the probability that at least one of the
-# riders is malicious AND that an assault happens. The parameter to be adjusted in order to tune the model to match reality
-# is the proportion of malicious people in the model. (While this joint probability is going to be 2000 times as high as 
-# real life, we cannot say for certain if our model has 2000 times as many malicious people as real life.)
+# riders is malicious AND that an assault happens. We will fix the probability that an assault happens on a ride with a malicious
+# person that targets them at 50%. The parameter to be adjusted in order to tune the model to match reality is the proportion of 
+# malicious people in the model. (While this joint probability is going to be 1000 times as high as real life, we cannot say for 
+# certain if our model has 1000 times as many malicious people as real life.)
+
+# In 2017, 36.1 % of Uber drivers were female.
 
 # In a study, 98.1% of female rape victims and 92.5% of female non-rape sex crime victims reported male perpetrators. (Source 2)
-    # We will average this to say ~95% of female sexual assault victims will report male perpetrators. This means mTw ~ 19x wTw
+    # We will average this to say ~95% of female sexual assault victims will report male perpetrators. This means mTw ~ 19 * wTw
 
 # For male sexual assault victims, the sex of the perpetrator varied widely based on the type of violence. (ex: rape vs. groping)
-    # This makes things difficult, as ultimately our preferred sex will have to come down to a guess. We have 4 unknowns, and only
+    # This makes things difficult, as our parameters preferred sex will have to come down to a guess. We have 4 unknowns, and only
     # 3 equations. 
     # Ultimately, we went with mTw = 0.95, which makes mTm=0.05, wTm=0.95, wTw=0.05
 
-# With some calculations from the CDC estimates (Source 2), we see that the probability a victim of sexual violence is a man is 0.2626.
+# With some calculations from the CDC estimates, we see that the probability a victim of sexual violence is a man is 0.2626.
     # This was used with our previous guesses to calculate the true proportions of malicious people. 
     # Of malicious people, men are 76.56% and women are 23.55%.
     # Using conditional probability, we can create a formula for the proportions of men and women who are malicious. 
-
-# From tuning model v1, we reached a probability that a ride with a malicious person ends in an assault is 0.491. We will fix this
-    # value in place, and tune this model by varying the proportion of people who are malicious. 
     
 # NEW ADDITIONS
 
@@ -60,27 +58,31 @@ from scipy import stats
 #       These numbers are sheer guesswork, under the assumption that men do not feel the same safety concerns
 #       as women are are less likely to care who picks them up. 
 
+# For malicious actors, we will say that 50% are "opportunistic" and will not indicate a preferred driver sex, and the remaining 
+# 50% are "predatory" and will indicate the sex they would normally target for assault. 
+#       These numbers are also guesswork. 
+
 # Source 1: http://web.archive.org/web/20210423034332/https://www.businessofapps.com/data/uber-statistics/, accessed 3 May 2021
 # Source 2:  https://www.cdc.gov/violenceprevention/pdf/nisvs_report2010-a.pdf, accessed 3 May 2021
 
 
 class Board:
     #ADJUSTABLE VARIABLES
-    expectedRides = 187000  #AVERAGE NUMBER OF RIDES EXPECTED OVER THE COURSE OF THE SIMULATION
-    expectedAssaults = 438  #AVERAGE NUMBER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
     numDrivers = 1000       #NUMBER OF DRIVERS IN THE SIMULATION
     numDays = 50            #NUMBER OF DAYS THE SIMULATION RUNS FOR
     probMalicious = 0.005   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
     probAssault = 0.5	    #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
-    assaultsPerRide = 0.002648       #AVERAGE NUMBER OF ASSAULTS PER RIDE, APPROX. 2000 TIMES REAL LIFE.
-    ridersPer = 20.6             #NUMBER OF RIDERS GENERATED PER DRIVER
+    ridersPer = 22.2             #NUMBER OF RIDERS GENERATED PER DRIVER
     mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
     wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
     pMM = 0.7656        #PROBABILITY A MALICIOUS PERSON IS A MAN  
     mPreference = 0.4          #PROBABILITY A NON-MALICIOUS MAN HAS A PREFERRED DRIVER SEX
     mPw = 0.5                  #PROBABILITY A NON-MALICIOUS MAN PREFERS FEMALE DRIVERS
     wPreference = 0.6           #PROBABILITY A WOMAN HAS A PREFERRED DRIVER SEX
-    wPw = 0.8                  #PROBABILITY A NON-MALICIOUS WOMAN PREFERS FEMALE DRIVERSN
+    wPw = 0.8                  #PROBABILITY A NON-MALICIOUS WOMAN PREFERS FEMALE DRIVERS
+    expectedRides = 3.444*numDays*numDrivers    #AVERAGE NUMBER OF RIDES EXPECTED OVER THE COURSE OF THE SIMULATION
+    expectedAssaults = 0.4033*numDrivers        #AVERAGE NUMBER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
+
 
     def __init__(self):
         self.mTm = 1 - self.mTw              #PROBABILITY A MALICIOUS MAN TARGETS MEN
@@ -250,9 +252,9 @@ class Driver:
 
 class Rider:
     #ADJUSTABLE VARIABLES
-    probNeedRide = 0.1816               #PROBABILITY RIDER NEEDS A RIDE
+    probNeedRide = 0.1551               #PROBABILITY RIDER NEEDS A RIDE
     probMale = 0.5                      #PROBABILITY THE RIDER IS MALE
-    probOpportunist = 0.5               #PROBABILITY A MALICIOUS RIDER IS OPPORTUNISTIC
+    probOpportunist = 0.5               #PROBABILITY A MALICIOUS RIDER IS OPPORTUNISTIC VS. PREDATORY
 
     def __init__(self, board, rx, ry):
         self.male = False                   #INDICATES THE SEX OF THE RIDER
@@ -263,33 +265,40 @@ class Rider:
         self.preferredSex = None            #IF NOT MALICIOUS, RIDER'S PREFERRED DRIVER SEX
         if (r.random() < self.probMale):
             self.male = True
-            
             if (r.random() < board.probMaliciousMan):
                 self.isMalicious = True
                 if (r.random() < board.mTw):
                     self.targetWomen = True
-                    if (r.random() < self.probOpportunist):
+                    if (r.random() >= self.probOpportunist):
                         self.preferredSex = "F"
                 else:
                     self.targetWomen = False
-                    if (r.random() < self.probOpportunist):
+                    if (r.random() >= self.probOpportunist):
                         self.preferredSex = "M"
             else:
                 if (r.random() < board.mPreference):
                     if (r.random() < board.mPw):
-                        self.preferredSex = "M"
+                        self.preferredSex = "F"
                     else:
-                        self.preferredSex="F"
+                        self.preferredSex="M"
         else:
             self.male = False
             if (r.random() < board.probMaliciousWoman):
                 self.isMalicious = True
                 if (r.random() < board.wTw):
                     self.targetWomen = True
-                    self.preferredSex = "F"
+                    if (r.random() >= self.probOpportunist):
+                        self.preferredSex = "F" 
                 else:
                     self.targetWomen = False
-                    self.preferredSex = "M"
+                    if (r.random() >= self.probOpportunist):
+                        self.preferredSex = "M"
+            else: 
+                if (r.random() < board.wPreference):
+                    if (r.random() < board.wPw):
+                        self.preferredSex = "F"
+                    else: 
+                        self.preferredSex = "M"
 
     #Resets the rider for the next day.
     def nextDay(self):
@@ -317,7 +326,7 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(2112)		#Set Seed
+r.seed(1776)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations
@@ -329,10 +338,11 @@ for i in range(50):	#Run 50 simulations
 
 
 #Print Data:
-print("average rides per sim: " + str(numpy.mean(total_rides)))
+print("Total rides in each sim: ")
 print(str(total_rides))
-print("mean assaults: " + str(numpy.mean(total_assaults)))
+print("Total assaults in each sim: ")
 print(str(total_assaults))
+print()
 
 # Significance tests
 print("Rides test: ")
@@ -340,16 +350,18 @@ alpha = 0.05
 print("Ho: mu = " + str(Board.expectedRides))
 print("Ha: mu != " + str(Board.expectedRides))
 print("Significance level = " + str(alpha))
+print("average rides per sim: " + str(numpy.mean(total_rides)))
 s, p = scipy.stats.ttest_1samp(total_rides, Board.expectedRides, alternative="two-sided")
 print("P_value = " + str(p))
 print("Reject Ho = " + str((p < alpha)))
-
+print()
 
 print("Assaults test: ")
 alpha = 0.05
 print("Ho: mu = " + str(Board.expectedAssaults))
 print("Ha: mu != " + str(Board.expectedAssaults))
 print("Significance level = " + str(alpha))
+print("mean assaults: " + str(numpy.mean(total_assaults)))
 s, p = scipy.stats.ttest_1samp(total_assaults, Board.expectedAssaults, alternative="two-sided")
 print("P_value = " + str(p))
 print("Reject Ho = " + str((p < alpha)))
