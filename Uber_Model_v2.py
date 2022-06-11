@@ -61,7 +61,7 @@ class Board:
     ridersPer = 22.2             #NUMBER OF RIDERS GENERATED PER DRIVER
     mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
     wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
-    pMM = 0.7656        #PROBABILITY A MALICIOUS PERSON IS A MAN  
+    pMM = 0.7639        #PROBABILITY A MALICIOUS PERSON IS A MAN  
     expectedRides = 3.444*numDays*numDrivers    #AVERAGE NUMBER OF RIDES EXPECTED OVER THE COURSE OF THE SIMULATION
     expectedAssaults = 0.4033*numDrivers        #AVERAGE NUMBER OF ASSAULTS EXPECTED OVER THE COURSE OF THE SIMULATION
 
@@ -263,7 +263,7 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1221)		#Set Seed
+r.seed(3345)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations
