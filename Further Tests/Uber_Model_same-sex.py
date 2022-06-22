@@ -5,12 +5,13 @@ import numpy
 import scipy
 from scipy import stats
 
-# Rideshare service model with the probability an assault occurs on a given ride decreased from the baseline.
-# Original: 0.5, New: 0.4 
+# Rideshare service model, but drivers are only shown riders of the same sex
+
 # Author: Ian Roberts
+# Date of last Update: 2022-06-19
 
-# See Uber_Model_baseline file for sources and derivations
-
+# When drivers enumerate all riders within their range at the start of each simulation, they will skip over any
+# riders that are not the same sex as the driver. 
 
 
 class Board:
@@ -18,7 +19,7 @@ class Board:
     numDrivers = 1000       #NUMBER OF DRIVERS IN THE SIMULATION
     numDays = 50            #NUMBER OF DAYS THE SIMULATION RUNS FOR
     probMalicious = 0.005   #PROBABILITY A DRIVER OR RIDER IS MALICIOUS
-    probAssault = 0.4	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
+    probAssault = 0.5	 #PROBABILITY OF AN ASSAULT DURING A RIDE WITH A MALICIOUS PERSON
     ridersPer = 22.2             #NUMBER OF RIDERS GENERATED PER DRIVER
     mTw = 0.95                 #PROBABILITY A MALICIOUS MAN TARGETS WOMEN
     wTm = 0.95                 #PROBABILITY A MALICIOUS WOMAN TARGETS MEN
@@ -125,7 +126,7 @@ class Driver:
         for rider in board.setRiders:
             x = rider.coords[0] - self.coords[0]
             y = rider.coords[1] - self.coords[1]
-            if (x*x + y*y <= self.radius*self.radius):
+            if (x*x + y*y <= self.radius*self.radius and rider.male == self.male):
                 self.ridersInRange.add(rider)
 
     #Finds the riders in range that need a ride that day.
@@ -182,7 +183,7 @@ class Driver:
 
 class Rider:
     # ADJUSTABLE VARIABLES
-    probNeedRide = 0.1552             #PROBABILITY RIDER NEEDS A RIDE
+    probNeedRide = 0.15516             #PROBABILITY RIDER NEEDS A RIDE
     probMale = 0.5                      #PROBABILITY THE RIDER IS MALE
 
     def __init__(self, board):
@@ -224,7 +225,7 @@ class Rider:
 
 #MAIN CODE
 
-r.seed(1234)		#Set Seed
+r.seed(2112)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
 for i in range(50):	#Run 50 simulations

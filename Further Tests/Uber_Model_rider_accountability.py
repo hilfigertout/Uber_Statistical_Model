@@ -5,48 +5,17 @@ import numpy
 import scipy
 from scipy import stats
 
-# Rideshare service model, tuned to match our baseline expectations of reality. 
+# Rideshare service model, except riders are held accountable.
 
 # Author: Ian Roberts
-# Date of last Update: 2022-06-19
+# Date of last Update: 2022-06-20
 
-# Sources and Derivations: 
+# After a malicious rider commits an assault, there is a period of time before that rider is removed. Then there is another period 
+# of time before that rider returns to the app. 
 
-# In 2019 and 2020, there were 5 million Uber drivers. For those 5 million drivers, Uber claims to have 111 million average monthly users.
-    # This means an average of 22.2 riders per driver. We will generate 22.2*d riders and scatter them
-    # randomly about the board. 
+# This test was run with these two parameters set to (1,1), (3,3), and (5, 5). 
 
-#For those 5 million drivers, Uber claims there were 17.22 million trips per day, on average. 
-    # This means that each driver makes an average of 3.444 trips per day. So for a 22.2 riders per driver,
-    # we can say the probability a rider needs a ride is 0.15516.
-    # For 1000 drivers, we expect to see approx. 3444 rides per day, 172200 rides over 50 days.
-    # Running the sim while counting the number of rides with this parameter shows that it works. 
 
-# In 2018, Uber reported 3045 sexual assaults in 1.3 billion rides 
-    # Assuming this rate of "assaults per ride" still holds, we expect to see about 0.438 assaults in the fifty days of 
-    # our simulation. Since that's absoultely tiny, we are going to artificially scale it up by a factor of 1000 so the variations
-    # are visible. Thus, we expect to see about 403.3 assaults per 50-day sim, on average. 
-
-# The probability of an assault happening on a ride is assumed to be equal to the probability that at least one of the
-# riders is malicious AND that an assault happens. We will fix the probability that an assault happens on a ride with a malicious
-# person that targets them at 50%. The parameter to be adjusted in order to tune the model to match reality is the proportion of 
-# malicious people in the model. (While this joint probability is going to be 1000 times as high as real life, we cannot say for 
-# certain if our model has 1000 times as many malicious people as real life.)
-
-# In 2017, 36.1 % of Uber drivers were female.
-
-# In a study, 98.1% of female rape victims and 92.5% of female non-rape sex crime victims reported male perpetrators. (Source 2)
-    # We will average this to say ~95% of female sexual assault victims will report male perpetrators. This means mTw ~ 19 * wTw
-
-# For male sexual assault victims, the sex of the perpetrator varied widely based on the type of violence. (ex: rape vs. groping)
-    # This makes things difficult, as our parameters preferred sex will have to come down to a guess. We have 4 unknowns, and only
-    # 3 equations. 
-    # Ultimately, we went with mTw = 0.95, which makes mTm=0.05, wTm=0.95, wTw=0.05
-
-# With some calculations from the CDC estimates, we see that the probability a victim of sexual violence is a man is 0.2626.
-    # This was used with our previous guesses to calculate the true proportions of malicious people. 
-    # Of malicious people, men are 76.56% and women are 23.55%.
-    # Using conditional probability, we can create a formula for the proportions of men and women who are malicious. 
 
 
 class Board:
@@ -86,7 +55,7 @@ class Board:
             driver.findRidersInRange(self)
 
         for rider in self.setRiders:
-            active = rider.nextDay()
+            active = rider.nextDay(self)
             if (active):
                 self.activeRiders.add(rider)
         for driver in self.setDrivers:
@@ -115,7 +84,7 @@ class Board:
             self.activeRiders.clear()                      #Reset for next day
             self.activeDrivers.clear()
             for rider in self.setRiders:
-                active = rider.nextDay()
+                active = rider.nextDay(self)
                 if (active):
                     self.activeRiders.add(rider)
             for driver in self.setDrivers:
@@ -200,10 +169,12 @@ class Driver:
                         board.assaults[board.day] = board.assaults[board.day] + 1
                         self.ridersInRange.remove(rider)
                         assaultHappened = True
+                        rider.daysSinceLastAssault = 0
                     elif ((not self.male and rider.targetWomen) and (r.random() < board.probAssault)):  #Assault occurs
                         board.assaults[board.day] = board.assaults[board.day] + 1
                         self.ridersInRange.remove(rider)
                         assaultHappened = True
+                        rider.daysSinceLastAssault = 0
                 if (self.isMalicious and not assaultHappened):
                     if ((rider.male and not self.targetWomen) and (r.random() < board.probAssault)):   #Assault occurs
                         board.assaults[board.day] = board.assaults[board.day] + 1
@@ -220,6 +191,8 @@ class Rider:
     # ADJUSTABLE VARIABLES
     probNeedRide = 0.15516             #PROBABILITY RIDER NEEDS A RIDE
     probMale = 0.5                      #PROBABILITY THE RIDER IS MALE
+    daysUntilRemoved = 3                #NUMBER OF DAYS AFTER A RIDER COMMITS AN ASSAULT THAT THEY ARE REMOVED FROM ACTIVITY
+    daysUntilReturn = 3                 #NUMBER OF DAYS AFTER A RIDER IS REMOVED THAT THEY RETURN TO THE SERVICE 
 
     def __init__(self, board):
         self.male = False                   #INDICATES THE SEX OF THE RIDER
@@ -227,6 +200,7 @@ class Rider:
         self.coords = (r.uniform(0, 10), r.uniform(0, 10))              #COORDINATES OF THE RIDER
         self.targetWomen = None             #IF MALICIOUS, INDICATES PREFERRED TARGET SEX
         self.isMalicious = False            #MALICIOUSNESS INDICATOR
+        self.daysSinceLastAssault = (-1) * (board.numDays + 1)  #NUMBER OF DAYS SINCE THIS RIDER HAS COMMITTED AN ASSAULT
         if (r.random() < self.probMale):
             self.male = True
             if (r.random() < board.probMaliciousGivenMan):
@@ -245,10 +219,14 @@ class Rider:
                     self.targetWomen = False
 
     #Resets the rider for the next day.
-    def nextDay(self):
+    def nextDay(self, board):
         self.needRide = False
-        if (r.random() < self.probNeedRide):
-            self.needRide = True
+        self.daysSinceLastAssault += 1
+        if (self.daysSinceLastAssault >= self.daysUntilReturn + self.daysUntilRemoved):
+            self.daysSinceLastAssault = (-1) * (board.numDays + 1)
+        if (self.daysSinceLastAssault < self.daysUntilRemoved):
+            if (r.random() < self.probNeedRide):
+                self.needRide = True
         return self.needRide
 
 
