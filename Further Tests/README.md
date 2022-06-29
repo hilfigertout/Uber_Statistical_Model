@@ -8,6 +8,8 @@ This folder contains files meant to test what parameters change the number of se
 
 - Uber_Model_safety_test.py - this model tests the effectiveness of measures designed to reduce the probability of an assault on a ride with a malicious person. This can be done in the real world with safety measures such as barriers or cameras in the car. This model resulted in a statistically significant decrease in the number of assaults. 
 
+- Uber_Model_driver_vetting.py - this model tests the effectiveness of decreasing the proportion of just drivers who are malicious. This is analagous to a rideshare company implementing background checks and a vetting process. This model resulted in a statistically significant decrease to the number of assaults with a 50% reduction in malicious drivers. 
+
 - Uber_Model_more_women_drivers.py - this model tests the effectiveness of increasing the number of women who drive for rideshare services. One run with 50% female drivers resulted in a statistically significant increase in the number of assaults. Another run with 100% female drivers resulted in no significant change to the number of assaults. 
 
 - Uber_Model_sex_segregation.py - this model forces drivers to only pick up riders of the same sex. This resulted in a statistically significant decrease in the number of assaults. 
