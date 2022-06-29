@@ -59,7 +59,7 @@ The choice test model implements rider choice. Riders can indicate a preference 
 
 ## POTENTIAL PROBLEMS WITH THE MODEL:
 
-- Malicious users will never again ride with someone they have assaulted, and the simulation never adds new people. Thus, the number of assaults drops sharply (and unrealistically) if the simulation runs for long enough. To account for this, the tests we ran with this simulation only runs for 50 days, where this effect is negligible. 
+- Malicious users will never again ride with someone they have assaulted, and the simulation never adds new people. Thus, the number of assaults drops sharply (and unrealistically) if the simulation runs for long enough. To account for this, the tests we ran with this simulation only run for 50 days, where this effect is negligible. 
 
 - With 1000 drivers, we expect the model to proportionally give 172200 rides in its 50 simulated days. Using the real-world values of assaults per ride (3045 in 1.3 billion rides), we would expect 0.403 assaults in the expected 172200 rides, which is too small to notice any effect. In order to combat this, the model is tuned to give us 1000 times as many assaults as in real life - about 403 on average - by increasing the number of malicious people and the probability a ride with a malicious person ends in an assault. This should not be an issue, as we are only examining the deviation from the baseline, so this artificial scaling should not impact the final results. 
 
