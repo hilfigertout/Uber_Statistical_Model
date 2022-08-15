@@ -75,6 +75,7 @@ class Board:
         self.activeRiders = set()      #SET OF RIDERS WHO NEED A RIDE THAT DAY
         self.activeDrivers = set()     #SET OF DRIVERS WHO CAN STILL GIVE A RIDE THAT DAY
         self.driversToRemove = set()   #SET OF DRIVERS NOT ACTIVE AFTER EACH BATCH OF RIDES
+        # self.assaultsByDrivers = 0   #NUMBER OF ASSAULTS THAT WERE COMMITTED BY THE DRIVER OVER THE SIMULATION
         
         for i in range(self.numDrivers):                             #Generate Driveres      
             self.setDrivers.add(Driver(self))
@@ -207,9 +208,11 @@ class Driver:
                 if (self.isMalicious and not assaultHappened):
                     if ((rider.male and not self.targetWomen) and (r.random() < board.probAssault)):   #Assault occurs
                         board.assaults[board.day] = board.assaults[board.day] + 1
+                        # board.assaultsByDrivers += 1
                         self.ridersInRange.remove(rider)
                     elif ((not rider.male and self.targetWomen) and (r.random() < board.probAssault)): #Assault occurs
                         board.assaults[board.day] = board.assaults[board.day] + 1
+                        # board.assaultsByDrivers += 1
                         self.ridersInRange.remove(rider)
         return rider
 
@@ -263,12 +266,14 @@ class Rider:
 r.seed(2112)		#Set Seed
 total_assaults = []	#List to store the total number of assaults per simulation
 total_rides = []    #List to store the total number of rides per simulation
+# total_assaults_by_drivers = 0
 for i in range(50):	#Run 50 simulations
     b = Board()
     b.runSim()
     print("Simulation " + str(i + 1) + " complete! ")
     total_assaults.append(sum(b.assaults))
     total_rides.append(sum(b.rides))
+    # total_assaults_by_drivers += b.assaultsByDrivers
 
 
 #Print Data:
@@ -277,6 +282,8 @@ print(str(total_rides))
 print("Total assaults in each sim: ")
 print(str(total_assaults))
 print()
+# print("Proportion of assaults committed by drivers: ")
+# print(str((total_assaults_by_drivers / numpy.sum(total_assaults))))
 
 # Significance tests
 print("Rides test: ")
@@ -299,7 +306,3 @@ print("mean assaults: " + str(numpy.mean(total_assaults)))
 s, p = scipy.stats.ttest_1samp(total_assaults, Board.expectedAssaults, alternative="two-sided")
 print("P_value = " + str(p))
 print("Reject Ho = " + str((p < alpha)))
-
-
-
-
